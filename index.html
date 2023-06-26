@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <script>
+        [
+            "window/intro.html",
+            "window/projects.html",
+            "window/experiences.html",
+        ].forEach(load)
+
+        function load(url) {
+            $.get(url, html => $("body").prepend(html) & init())
+        }
+
+        function init() {
+            let clickedWindow = null
+            let mouse = {
+                offsetX: 0,
+                offsetY: 0
+            }
+
+            let windows = [...document.querySelectorAll(".window")]
+            windows.forEach(form => {
+                formWidth = parseInt(window.getComputedStyle(form).width)
+                formHeight = parseInt(window.getComputedStyle(form).height)
+
+                form.style.left = Math.floor(Math.random() * (window.innerWidth - formWidth)) + "px"
+                form.style.top = Math.floor(Math.random() * (window.innerHeight - formHeight)) + "px"
+
+                form.addEventListener("mousedown", e => {
+                    clickedWindow = form
+                    mouse.offsetX = e.offsetX
+                    mouse.offsetY = e.offsetY
+                    windows.forEach(w => w.style.zIndex = 0)
+                    form.style.zIndex = 10
+                })
+            })
+
+            window.addEventListener("mouseup", e => {
+                clickedWindow = null
+            })
+
+            document.addEventListener("mousemove", (e) => {
+                const mouseX = e.clientX - mouse.offsetX
+                const mouseY = e.clientY - mouse.offsetY
+
+                if (clickedWindow == null) return
+
+                clickedWindow.style.left = mouseX + 'px'
+                clickedWindow.style.top = mouseY + 'px'
+            });
+        }
+
+
+
+    </script>
+</body>
+
+</html>
